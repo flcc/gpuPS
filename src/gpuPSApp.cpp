@@ -78,7 +78,7 @@ void gpuPSApp::setup()
 	gl::Fbo::Format format;
 	format.enableDepthBuffer(false);
 	format.enableColorBuffer(true);
-	format.setColorInternalFormat( GL_RGBA32F_ARB );
+	format.setColorInternalFormat( GL_RGBA16F_ARB );
 	mFBO = gl::Fbo( SIDE, SIDE, format );
 	
 	mFBO.bindFramebuffer();
