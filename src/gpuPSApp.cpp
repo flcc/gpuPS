@@ -56,19 +56,12 @@ void gpuPSApp::setup()
 		std::cout << "Unable to load shader" << endl;
 	}
 	
-	float ang;
 	//====== Texture ======
 	mInitPos = Surface32f( SIDE, SIDE, true);
 	Surface32f::Iter pixelIter = mInitPos.getIter();
 	while( pixelIter.line() ) {
 		while( pixelIter.pixel() ) {
-			/*  Initial particle positions within the RBG color values.
-				Still not working correctly... Take for example either :
-				ColorAf( Rand::randFloat(), Rand::randFloat(), Rand::randFloat(), 1.0f )
-				ColorAf( cosf(ang), 0.0f, sinf(ang), 1.0f ) );
-			*/
-			ang += 0.0003f;
-			mInitPos.setPixel( pixelIter.getPos(), ColorAf( cosf(ang), ang/1000.0f, sinf(ang), 1.0f ) );
+			mInitPos.setPixel( pixelIter.getPos(), ColorAf( Rand::randFloat()-0.5f, Rand::randFloat()-0.5f, Rand::randFloat()-0.5f, 1.0f ) );
 		}
 	}
 	gl::Texture::Format tFormat;
@@ -82,6 +75,8 @@ void gpuPSApp::setup()
 	gl::Fbo::Format format;
 	format.enableDepthBuffer(false);
 	format.enableColorBuffer(true);
+	format.setMinFilter( GL_NEAREST );
+	format.setMagFilter( GL_NEAREST );
 	format.setColorInternalFormat( GL_RGBA32F_ARB );
 	mFBO = gl::Fbo( SIDE, SIDE, format );
 	
@@ -91,8 +86,8 @@ void gpuPSApp::setup()
 	gl::setViewport( mFBO.getBounds() );
 	
 	mTexture.enableAndBind();
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 	
 	gl::drawSolidRect( mFBO.getBounds() );
 	mTexture.unbind();
@@ -100,30 +95,28 @@ void gpuPSApp::setup()
 	//console()<<SIDE*SIDE<<" vertices!!!"<<std::endl;
 	
 	
-	//====== VboMesh the same size as the texture ======
+	//====== Dummy VboMesh the same size as the texture ======
 	/* THE VBO HAS TO BE DRAWN AFTER FBO!
 	 http://www.openframeworks.cc/forum/viewtopic.php?f=9&t=2443
 	 */
 	int totalVertices = SIDE * SIDE;
 	vector<Vec2f> texCoords;
-	vector<Vec3f> vCoords;
 	vector<uint32_t> indices;
 	gl::VboMesh::Layout layout;
 	layout.setStaticIndices();
 	layout.setStaticPositions();
 	layout.setStaticTexCoords2d();
 	layout.setStaticNormals();
+	//layout.setDynamicColorsRGBA();
 	mVboMesh = gl::VboMesh( totalVertices, totalVertices, layout, GL_POINTS);
 	for( int x = 0; x < SIDE; ++x ) {
 		for( int y = 0; y < SIDE; ++y ) {	
 			indices.push_back( x * SIDE + y );
 			texCoords.push_back( Vec2f( x/(float)SIDE, y/(float)SIDE ) );
-			vCoords.push_back( Vec3f( x/(float)SIDE, 0, y/(float)SIDE ) );
 		}
 	}
 	mVboMesh.bufferIndices( indices );
 	mVboMesh.bufferTexCoords2d( 0, texCoords );
-	mVboMesh.bufferPositions( vCoords );
 	
 	//gl::enableDepthRead(); <--- affects the fps a lot
 	//glColor3f(1.0f, 1.0f, 1.0f);
