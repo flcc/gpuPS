@@ -11,7 +11,7 @@
 #include "cinder/Rand.h"
 #include "cinder/Utilities.h"
 
-#define SIDE 600
+#define SIDE 1000
 
 using namespace ci;
 using namespace ci::app;
@@ -62,13 +62,17 @@ void gpuPSApp::setup()
 	Surface32f::Iter pixelIter = mInitPos.getIter();
 	while( pixelIter.line() ) {
 		while( pixelIter.pixel() ) {
-			// Initial particle positions within the RBG color values.
-			ang += Rand::randFloat(0.525f,0.530f);
-			mInitPos.setPixel( pixelIter.getPos(), ColorAf( cosf(ang), 0.0f, sinf(ang), 1.0f ) );
+			/*  Initial particle positions within the RBG color values.
+				Still not working correctly... Take for example either :
+				ColorAf( Rand::randFloat(), Rand::randFloat(), Rand::randFloat(), 1.0f )
+				ColorAf( cosf(ang), 0.0f, sinf(ang), 1.0f ) );
+			*/
+			ang += 0.0003f;
+			mInitPos.setPixel( pixelIter.getPos(), ColorAf( cosf(ang), ang/1000.0f, sinf(ang), 1.0f ) );
 		}
 	}
 	gl::Texture::Format tFormat;
-	tFormat.setInternalFormat(GL_RGBA16F_ARB);
+	tFormat.setInternalFormat(GL_RGBA32F_ARB);
 	mTexture = gl::Texture( mInitPos, tFormat);
 	mTexture.setWrap( GL_REPEAT, GL_REPEAT );
 	mTexture.setMinFilter( GL_NEAREST );
@@ -78,7 +82,7 @@ void gpuPSApp::setup()
 	gl::Fbo::Format format;
 	format.enableDepthBuffer(false);
 	format.enableColorBuffer(true);
-	format.setColorInternalFormat( GL_RGBA16F_ARB );
+	format.setColorInternalFormat( GL_RGBA32F_ARB );
 	mFBO = gl::Fbo( SIDE, SIDE, format );
 	
 	mFBO.bindFramebuffer();
@@ -101,24 +105,18 @@ void gpuPSApp::setup()
 	 http://www.openframeworks.cc/forum/viewtopic.php?f=9&t=2443
 	 */
 	int totalVertices = SIDE * SIDE;
-	int totalQuads = ( SIDE - 1 ) * ( SIDE - 1 );
 	vector<Vec2f> texCoords;
-	vector<Vec3f> vCoords, normCoords;
+	vector<Vec3f> vCoords;
 	vector<uint32_t> indices;
 	gl::VboMesh::Layout layout;
 	layout.setStaticIndices();
 	layout.setStaticPositions();
 	layout.setStaticTexCoords2d();
 	layout.setStaticNormals();
-	mVboMesh = gl::VboMesh( totalVertices, totalQuads * 4, layout, GL_POINTS); // GL_LINES GL_QUADS
+	mVboMesh = gl::VboMesh( totalVertices, totalVertices, layout, GL_POINTS);
 	for( int x = 0; x < SIDE; ++x ) {
 		for( int y = 0; y < SIDE; ++y ) {	
-			if( ( x + 1 < SIDE ) && ( y + 1 < SIDE ) ) {
-				indices.push_back( (x+0) * SIDE + (y+0) );
-				indices.push_back( (x+1) * SIDE + (y+0) );
-				indices.push_back( (x+1) * SIDE + (y+1) );
-				indices.push_back( (x+0) * SIDE + (y+1) );
-			}
+			indices.push_back( x * SIDE + y );
 			texCoords.push_back( Vec2f( x/(float)SIDE, y/(float)SIDE ) );
 			vCoords.push_back( Vec3f( x/(float)SIDE, 0, y/(float)SIDE ) );
 		}
@@ -127,8 +125,8 @@ void gpuPSApp::setup()
 	mVboMesh.bufferTexCoords2d( 0, texCoords );
 	mVboMesh.bufferPositions( vCoords );
 	
-	gl::enableDepthRead();
-	glColor3f(1.0f, 1.0f, 1.0f);
+	//gl::enableDepthRead(); <--- affects the fps a lot
+	//glColor3f(1.0f, 1.0f, 1.0f);
 }
 
 void gpuPSApp::resize( int width, int height )
@@ -170,8 +168,8 @@ void gpuPSApp::draw()
 	
 	mShader.unbind();
 	mFBO.unbindTexture();
-	//	gl::drawString( toString( SIDE*SIDE ) + " vertices!", Vec2f(32.0f, 32.0f));
-	//	gl::drawString( toString((int) getAverageFps()) + " fps", Vec2f(32.0f, 52.0f));
+//	gl::drawString( toString( SIDE*SIDE ) + " vertices!", Vec2f(32.0f, 32.0f));
+//	gl::drawString( toString((int) getAverageFps()) + " fps", Vec2f(32.0f, 52.0f));
 }
 
 
