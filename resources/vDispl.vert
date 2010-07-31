@@ -1,7 +1,7 @@
 uniform sampler2D displacementMap;
 void main()
 {
-	float scale = 600.0;
+	float scale = 900.0;
 	vec4 newVertexPos;
 	vec4 dv;
 	dv = texture2D( displacementMap, gl_MultiTexCoord0.xy );

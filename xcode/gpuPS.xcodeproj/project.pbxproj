@@ -19,6 +19,8 @@
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		53E3CDFC0E86099300238D2B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E3CDFB0E86099300238D2B /* Carbon.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		B05FE3C412047D4300B6333F /* pos.frag in Resources */ = {isa = PBXBuildFile; fileRef = B05FE3C212047D4300B6333F /* pos.frag */; };
+		B05FE3C512047D4300B6333F /* pos.vert in Resources */ = {isa = PBXBuildFile; fileRef = B05FE3C312047D4300B6333F /* pos.vert */; };
 		B080F7B811EBDCEF00CB9611 /* vDispl.frag in Resources */ = {isa = PBXBuildFile; fileRef = B080F7B611EBDCEF00CB9611 /* vDispl.frag */; };
 		B080F7B911EBDCEF00CB9611 /* vDispl.vert in Resources */ = {isa = PBXBuildFile; fileRef = B080F7B711EBDCEF00CB9611 /* vDispl.vert */; };
 /* End PBXBuildFile section */
@@ -42,6 +44,8 @@
 		53E3CDFB0E86099300238D2B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* gpuPS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gpuPS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B05FE3C212047D4300B6333F /* pos.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = pos.frag; path = ../resources/pos.frag; sourceTree = SOURCE_ROOT; };
+		B05FE3C312047D4300B6333F /* pos.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = pos.vert; path = ../resources/pos.vert; sourceTree = SOURCE_ROOT; };
 		B080F7B611EBDCEF00CB9611 /* vDispl.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = vDispl.frag; path = ../resources/vDispl.frag; sourceTree = SOURCE_ROOT; };
 		B080F7B711EBDCEF00CB9611 /* vDispl.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = vDispl.vert; path = ../resources/vDispl.vert; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -133,6 +137,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B05FE3C212047D4300B6333F /* pos.frag */,
+				B05FE3C312047D4300B6333F /* pos.vert */,
 				B080F7B611EBDCEF00CB9611 /* vDispl.frag */,
 				B080F7B711EBDCEF00CB9611 /* vDispl.vert */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -193,6 +199,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B05FE3C412047D4300B6333F /* pos.frag in Resources */,
+				B05FE3C512047D4300B6333F /* pos.vert in Resources */,
 				B080F7B811EBDCEF00CB9611 /* vDispl.frag in Resources */,
 				B080F7B911EBDCEF00CB9611 /* vDispl.vert in Resources */,
 				00CCAF15116A9FEE008396D5 /* CinderApp.icns in Resources */,
