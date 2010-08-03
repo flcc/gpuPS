@@ -1,12 +1,13 @@
 //#extension GL_ARB_draw_buffers : enable
 uniform sampler2D posArray;
 uniform sampler2D velArray;
+varying vec4 texCoord;
 
 void main(void)
 {	
-	float mass	= texture2D( posArray, gl_TexCoord[0].st).a;
-	vec3 p		= texture2D( posArray, gl_TexCoord[0].st).rgb;
-	vec3 v		= texture2D( velArray, gl_TexCoord[1].st).rgb;
+	float mass	= texture2D( posArray, texCoord.st).a;
+	vec3 p		= texture2D( posArray, texCoord.st).rgb;
+	vec3 v		= texture2D( velArray, texCoord.st).rgb;
 	vec3 acc	= -0.0002*p; // Centripetal force
 	vec3 ayAcc  = 0.00001*normalize(cross(vec3(0, 1 ,0),p)); // Angular force
 

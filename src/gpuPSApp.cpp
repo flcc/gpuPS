@@ -44,8 +44,8 @@ public:
 
 void gpuPSApp::prepareSettings( Settings *settings )
 {
-	//settings->setWindowSize( 1000, 800 );
-	settings->setFullScreen(true);
+	settings->setWindowSize( 1000, 800 );
+	//settings->setFullScreen(true);
 }
 
 void gpuPSApp::setupTextures(){
@@ -194,10 +194,10 @@ void gpuPSApp::update()
 	mPosShader.uniform( "velArray", 1 );
 	
 	glBegin(GL_QUADS);
-	glMultiTexCoord2f(GL_TEXTURE0, 0.0f, 0.0f); glMultiTexCoord2f(GL_TEXTURE1, 0.0f, 0.0f); glVertex2f( 0.0f, 0.0f);
-	glMultiTexCoord2f(GL_TEXTURE0, 0.0f, 1.0f); glMultiTexCoord2f(GL_TEXTURE1, 0.0f, 1.0f); glVertex2f( 0.0f, SIDE);
-	glMultiTexCoord2f(GL_TEXTURE0, 1.0f, 1.0f); glMultiTexCoord2f(GL_TEXTURE1, 1.0f, 1.0f); glVertex2f( SIDE, SIDE);
-	glMultiTexCoord2f(GL_TEXTURE0, 1.0f, 0.0f); glMultiTexCoord2f(GL_TEXTURE1, 1.0f, 0.0f); glVertex2f( SIDE, 0.0f);
+	glTexCoord2f( 0.0f, 0.0f); glVertex2f( 0.0f, 0.0f);
+	glTexCoord2f( 0.0f, 1.0f); glVertex2f( 0.0f, SIDE);
+	glTexCoord2f( 1.0f, 1.0f); glVertex2f( SIDE, SIDE);
+	glTexCoord2f( 1.0f, 0.0f); glVertex2f( SIDE, 0.0f);
 	glEnd();
 	
 	mPosShader.unbind();
@@ -226,8 +226,9 @@ void gpuPSApp::draw()
 	mDisplShader.unbind();
 	mFBO[mCurrentFBO].unbindTexture();
 	
-//	gl::drawString( toString( SIDE*SIDE ) + " vertices!", Vec2f(32.0f, 32.0f));
-//	gl::drawString( toString((int) getAverageFps()) + " fps", Vec2f(32.0f, 52.0f));
+	gl::setMatricesWindow(getWindowSize());
+	gl::drawString( toString( SIDE*SIDE ) + " vertices", Vec2f(32.0f, 32.0f));
+	gl::drawString( toString((int) getAverageFps()) + " fps", Vec2f(32.0f, 52.0f));
 }
 
 
@@ -239,7 +240,6 @@ void gpuPSApp::mouseDown( MouseEvent event )
 void gpuPSApp::mouseDrag( MouseEvent event )
 {
     mArcball.mouseDrag( event.getPos() );
-	//console()<< mMouse << std::endl;
 }
 
 void gpuPSApp::keyDown( KeyEvent event ){
