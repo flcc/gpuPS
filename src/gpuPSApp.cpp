@@ -25,7 +25,7 @@ public:
 	void	resetFBOs();
 	void	setupVBO();
 	void	setup();
-	void	resize( int width, int height );
+	void	resize( ResizeEvent event );
 	void	update();
 	void	draw();
 	void    mouseDown( MouseEvent event );
@@ -153,7 +153,7 @@ void gpuPSApp::setup()
 	setupTextures();
 	gl::Fbo::Format format;
 	format.enableDepthBuffer(false);
-	format.enableColorBuffer(true);
+	format.enableColorBuffer(true, 2);
 	format.setMinFilter( GL_NEAREST );
 	format.setMagFilter( GL_NEAREST );
 	format.setColorInternalFormat( GL_RGBA32F_ARB );
@@ -167,7 +167,7 @@ void gpuPSApp::setup()
 //	gl::enableAlphaBlending();
 }
 
-void gpuPSApp::resize( int width, int height )
+void gpuPSApp::resize( ResizeEvent event )
 {
 	mArcball.setWindowSize( getWindowSize() );
 	mArcball.setCenter( Vec2f( getWindowWidth() / 2.0f, getWindowHeight() / 2.0f ) );
@@ -187,8 +187,8 @@ void gpuPSApp::update()
 	
 	GLenum buf[2] = {GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT};
 	glDrawBuffers(2, buf);
-	mFBO[ mOtherFBO ].bindTexture(0);
-	mFBO[ mOtherFBO ].bindTexture(1);
+	mFBO[ mOtherFBO ].bindTexture(0, 0);
+	mFBO[ mOtherFBO ].bindTexture(1, 1);
 	mPosShader.bind();
 	mPosShader.uniform( "posArray", 0 );
 	mPosShader.uniform( "velArray", 1 );
@@ -214,7 +214,7 @@ void gpuPSApp::draw()
 	gl::setViewport( getWindowBounds() );
 	gl::clear( ColorA( 0.0f, 0.0f, 0.0f, 1.0f ) );
 	
-	mFBO[mCurrentFBO].bindTexture(0);
+	mFBO[mCurrentFBO].bindTexture(0,0);
 	mDisplShader.bind();
 	mDisplShader.uniform("displacementMap", 0 );
 	gl::pushModelView();
